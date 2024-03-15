@@ -10,4 +10,6 @@ public class WatchHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String watchId;
+	
+	private String sdf;
 }
