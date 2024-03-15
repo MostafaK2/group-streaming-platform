@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 // storing movie meta data
 @Entity
 @Table(name = "movie")
-public class movie {
+public class Movie {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
