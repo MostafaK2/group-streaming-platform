@@ -27,6 +27,6 @@ public class Payment {
 	@Column
 	private int cardNumber;
 	@Column
-	private int cvc;	
+	private int cvcsd;	
 	
 }
