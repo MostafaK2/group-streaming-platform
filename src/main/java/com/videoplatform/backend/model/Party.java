@@ -1,19 +1,31 @@
 package com.videoplatform.backend.model;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
-public class WatchHistory {
+public class Party {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String watchId;
+	private String partyId;
 	
 	@Column
-	private LocalDateTime timestamp;
+	private String partyName;
+	
+	@Column 
+	private String partyPicture;
+	
+	@Column
+	private String partyAdmin;
+	
+	@OneToMany(mappedBy = "party")
+	private List<PartyMember> partyMember;
+
 }

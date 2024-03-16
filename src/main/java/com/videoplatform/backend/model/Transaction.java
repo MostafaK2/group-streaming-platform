@@ -9,25 +9,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-// dont keep payments in the db find another solutions.
+// implement transactions and payments later on
+
 @Entity
-@Table(name = "payment")
-public class Payment {
+@Table(name = "Transaction")
+public class Transaction {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String paymentId;
+	private String transactionId;
 	
-	@Column(columnDefinition = "DATETIME")
-	private LocalDateTime dateAdded;
+	@Column
+	private int transactionType;
 	
-	@Column(columnDefinition = "DATETIME")
-	private LocalDateTime expirationDate;
 	@Column
-	private String cardType;
+	private LocalDateTime transactionDate;
+	
 	@Column
-	private int cardNumber;
+	private float totalAmount;
+	
+	// true for valid false for invalid
 	@Column
-	private int cvcsd;	
+	private boolean transactionStatus;
 	
 }
