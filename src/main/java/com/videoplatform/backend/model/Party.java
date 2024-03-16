@@ -27,5 +27,7 @@ public class Party {
 	
 	@OneToMany(mappedBy = "party")
 	private List<PartyMember> partyMember;
+	
+	
 
 }
