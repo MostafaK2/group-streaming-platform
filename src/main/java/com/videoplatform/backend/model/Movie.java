@@ -40,7 +40,8 @@ public class Movie {
 	@Column
 	private LocalDateTime createdAt;
 	
-	// the relationships
+	// the relationships between movie and watch history
+	// returns the number of watch history per movie overall
 	@OneToMany(mappedBy="movie")
 	private List<WatchHistory> watchHistory;
 }

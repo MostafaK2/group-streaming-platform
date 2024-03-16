@@ -26,7 +26,10 @@ public class Party {
 	private String partyAdmin;
 	
 	@OneToMany(mappedBy = "party")
-	private List<PartyMember> partyMember;
+	private List<PartyMember> partyMembers;
+	
+	@OneToMany(mappedBy = "party")
+	private List<Message> messages;
 	
 	
 

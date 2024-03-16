@@ -13,21 +13,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class WatchHistory {
+public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String watchId;
+	private String messageId;
 	
 	@Column
-	private LocalDateTime timestamp;
+	private String FromUser;
+	
+	@Column
+	private String messageText;
+	
+	@Column
+	private LocalDateTime sentDateTime;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "party_id")
 	@JsonIgnore
-	private User user;
-	
-	// dont ignore cause we need the movie id to get the meta data
-	@ManyToOne
-	@JoinColumn(name="movie_id")
-	private Movie movie;
+	private Party party;
 }
