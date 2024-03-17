@@ -8,10 +8,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+// dont keep payments in the db find another solutions.
 @Entity
 @Table(name = "payment")
-public class payment {
+@Getter @Setter 
+@NoArgsConstructor @AllArgsConstructor
+public class Payment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -27,6 +34,6 @@ public class payment {
 	@Column
 	private int cardNumber;
 	@Column
-	private int cvc;	
+	private int cvcsd;	
 	
 }
