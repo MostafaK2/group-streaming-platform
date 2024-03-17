@@ -17,10 +17,17 @@ public class UserService {
 		userRepository.save(user);
 		
 	}
-
+	
+	// post mapping
 	public User getUserById(String id) {
 		User user = userRepository.findById(id).get();	
 		return user;
+	}
+	
+	// deleteMapping implementation
+	public void deleteUser(String id) {
+		userRepository.deleteById(id);
+		
 	}
 	
 }

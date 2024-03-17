@@ -52,10 +52,19 @@ public class UserController {
 		
 	}
 	
+	// Post Mappings
 	@PostMapping("user")
 	public void addUser(@RequestBody User user) {
 		userService.addUser(user);
+		
 	}
 	
-	// Post Mappings
+	// Delete Mapping
+	@DeleteMapping("user/{id}")
+	public void deleteUser(@PathVariable String id) {
+		userService.deleteUser(id);
+	}
+	
+	
+	
 }
