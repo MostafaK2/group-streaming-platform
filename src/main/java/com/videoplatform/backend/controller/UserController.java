@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.videoplatform.backend.model.User;
 import com.videoplatform.backend.service.UserService;
+import com.videoplatform.backend.utils.JsonResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -35,18 +36,8 @@ public class UserController {
 			User user = userService.getUserById(id);
 			return ResponseEntity.ok(user);
 		}
-		catch(Exception ex) {
-			String errorMessage = ex.getMessage(); // Get the error message from the exception
-			String requestURI = request.getRequestURI();
-			
-		    // Build the custom error response JSON
-			 String jsonResponse = "{\n" +
-			            "    \"timestamp\": \"" + java.time.LocalDateTime.now() + "\",\n" +
-			            "    \"status\": 404,\n" +
-			            "    \"error\": \"Not Found\",\n" +
-			            "    \"message\": \"" + errorMessage + "\",\n" +
-			            "    \"path\": \"" + requestURI + "\"\n" +
-			            "}";
+		catch(Exception e) {
+			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(jsonResponse);
 		}
 		
@@ -54,8 +45,16 @@ public class UserController {
 	
 	// Post Mappings
 	@PostMapping("user")
-	public void addUser(@RequestBody User user) {
-		userService.addUser(user);
+	public ResponseEntity<?> addUser(@RequestBody User user) {
+		try {
+			userService.addUser(user);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.CONFLICT, e.getMessage(), request.getRequestURI());
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(jsonResponse);
+		}
+		
 		
 	}
 	

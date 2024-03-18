@@ -1,5 +1,6 @@
 package com.videoplatform.backend.model;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +41,13 @@ public class User {
 	private String lastName;
 	
 	@Column 
-	private byte[] profilePicture;
+	private String profilePicture;
+	@Column 
+	private LocalDateTime userCreatedAt;
+	
+	@Column
+	private UserType userType;
+	
 	
 	// one to many relationship from user to watch history
 	// multiple watch history per user
@@ -59,8 +66,9 @@ public class User {
 		super();
 	}
 
+
 	public User(String userId, String username, String email, String passwordHash, String firstName, String lastName,
-			byte[] profilePicture, List<WatchHistory> watchHistory, List<PartyMember> partyMember) {
+			String profilePicture, List<WatchHistory> watchHistory, List<PartyMember> partyMember) {
 		super();
 		this.userId = userId;
 		this.username = username;
@@ -73,78 +81,96 @@ public class User {
 		this.partyMember = partyMember;
 	}
 
+
 	public String getUserId() {
 		return userId;
 	}
+
 
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
+
 	public String getUsername() {
 		return username;
 	}
+
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+
 	public String getEmail() {
 		return email;
 	}
+
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+
 	public String getPasswordHash() {
 		return passwordHash;
 	}
+
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
 
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
+
 	public String getLastName() {
 		return lastName;
 	}
+
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public byte[] getProfilePicture() {
+
+	public String getProfilePicture() {
 		return profilePicture;
 	}
 
-	public void setProfilePicture(byte[] profilePicture) {
+
+	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
+
 
 	public List<WatchHistory> getWatchHistory() {
 		return watchHistory;
 	}
 
+
 	public void setWatchHistory(List<WatchHistory> watchHistory) {
 		this.watchHistory = watchHistory;
 	}
+
 
 	public List<PartyMember> getPartyMember() {
 		return partyMember;
 	}
 
+
 	public void setPartyMember(List<PartyMember> partyMember) {
 		this.partyMember = partyMember;
 	}
-	
+
 
 	@Override
 	public String toString() {
@@ -154,9 +180,29 @@ public class User {
 				+ (passwordHash != null ? "passwordHash = " + passwordHash + ", \n   " : "")
 				+ (firstName != null ? "firstName = " + firstName + ", \n   " : "")
 				+ (lastName != null ? "lastName = " + lastName + ", \n   " : "")
-				+ (profilePicture != null ? "profilePicture = " + Arrays.toString(profilePicture) + ", \n   " : "")
+				+ (profilePicture != null ? "profilePicture = " + profilePicture + ", \n   " : "")
 				+ (watchHistory != null ? "watchHistory = " + watchHistory + ", \n   " : "")
 				+ (partyMember != null ? "partyMember = " + partyMember : "") + "\n]";
+	}
+
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
+
+
+	public LocalDateTime getUserCreatedAt() {
+		return userCreatedAt;
+	}
+
+
+	public void setUserCreatedAt(LocalDateTime userCreatedAt) {
+		this.userCreatedAt = userCreatedAt;
 	}
 
 	
