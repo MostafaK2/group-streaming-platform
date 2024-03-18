@@ -16,7 +16,6 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
-	private static final long serialVersionUID = -2550185165626007488L;
 	public static final long JWT_TOKEN_VALIDITY = 12 * 30 * 24 * 60 * 60;
 
 	private static final String SECRET_KEY = "lB+ntA6Pvg4TjcqRepueLRRJ1mEffJb8reAZ38+OdXcdVQ7CZyuJMImSUua+6nscNk+3KlMnO2xfCmHIBLlyFyyr";
@@ -38,6 +37,16 @@ public class JwtUtils {
 		final String username = extractUsername(token);
 		return (userDetails != null &&  username.equals(userDetails.getUsername())) 
 				&& !isTokenExpired(token);
+	}
+	
+	public String generateToken(UserDetails userDetails) {
+		return Jwts
+				.builder()
+				.setSubject(userDetails.getUsername())
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
+				.compact();
 	}
 	
 	public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
