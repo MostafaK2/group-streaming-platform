@@ -29,33 +29,48 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	// Get Mapping
+	
+	/**
+	 * Retrieves a user by their unique identifier
+	 * @param String id
+	 * @return The user object if found, otherwise returns a JSON response with an error message.
+	 * @apiNote GET Request
+	 * 
+	 */
 	@GetMapping("user/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable String id) {
 		try {
 			User user = userService.getUserById(id);
-			return ResponseEntity.ok(user);
+			return ResponseEntity
+					.ok(user);
 		}
 		catch(Exception e) {
 			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(jsonResponse);
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body(jsonResponse);
 		}
 		
 	}
 	
-	// Post Mappings
+	/**
+	 * Adds a new user while ensuring uniqueness of email addresses.
+	 * 
+	 * @param user
+	 * @return  ResponseEntity<?> Returns a response entity indicating success or failure.
+	 * @apiNote Post Request
+	 */
 	@PostMapping("user")
 	public ResponseEntity<?> addUser(@RequestBody User user) {
 		try {
 			userService.addUser(user);
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.CONFLICT, e.getMessage(), request.getRequestURI());
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(jsonResponse);
-		}
-		
-		
+			return ResponseEntity
+					.status(HttpStatus.CONFLICT)
+					.body(jsonResponse);
+		}		
 	}
 	
 	// Delete Mapping
