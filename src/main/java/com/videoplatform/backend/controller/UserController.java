@@ -32,6 +32,7 @@ public class UserController {
 	
 	/**
 	 * Retrieves a user by their unique identifier
+	 * 
 	 * @param String id
 	 * @return The user object if found, otherwise returns a JSON response with an error message.
 	 * @apiNote GET Request
@@ -58,7 +59,8 @@ public class UserController {
 	 * 
 	 * @param user
 	 * @return  ResponseEntity<?> Returns a response entity indicating success or failure.
-	 * @apiNote Post Request
+	 * @apiNote POST Request
+	 * 
 	 */
 	@PostMapping("user")
 	public ResponseEntity<?> addUser(@RequestBody User user) {
