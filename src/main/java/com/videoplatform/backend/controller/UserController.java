@@ -29,6 +29,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@GetMapping("test")
+	public String hello() {
+		return "hello";
+	}
 	
 	/**
 	 * Retrieves a user by their unique identifier

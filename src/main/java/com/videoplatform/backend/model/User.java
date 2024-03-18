@@ -2,10 +2,17 @@ package com.videoplatform.backend.model;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +31,7 @@ import lombok.Setter;
 @Setter 
 @NoArgsConstructor 
 @AllArgsConstructor
-public class User {
+public class User implements UserDetails{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -34,7 +41,7 @@ public class User {
 	@Column
 	private String email;
 	@Column
-	private String passwordHash;
+	private String password;
 	@Column
 	private String firstName;
 	@Column
@@ -45,7 +52,7 @@ public class User {
 	@Column 
 	private LocalDateTime userCreatedAt;
 	
-	@Column
+	@Enumerated(EnumType.STRING)
 	private UserType userType;
 	
 	
@@ -60,6 +67,54 @@ public class User {
 	@OneToMany(mappedBy="user")
 	private List<PartyMember> partyMember;
 	
+
+	// UserDetails implemented methods
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return List.of(new SimpleGrantedAuthority(userType.name()));
+	}
+	
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	// UserDetails end
+
+	
 	
 	// DO NOT EDIT AFTER THIS: auto generated methods start here
 	public User() {
@@ -73,7 +128,7 @@ public class User {
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
-		this.passwordHash = passwordHash;
+		this.password = passwordHash;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.profilePicture = profilePicture;
@@ -92,11 +147,6 @@ public class User {
 	}
 
 
-	public String getUsername() {
-		return username;
-	}
-
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -112,13 +162,8 @@ public class User {
 	}
 
 
-	public String getPasswordHash() {
-		return passwordHash;
-	}
-
-
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 
@@ -177,7 +222,7 @@ public class User {
 		return "User :\n[\n   " + (userId != null ? "userId = " + userId + ", \n   " : "")
 				+ (username != null ? "username = " + username + ", \n   " : "")
 				+ (email != null ? "email = " + email + ", \n   " : "")
-				+ (passwordHash != null ? "passwordHash = " + passwordHash + ", \n   " : "")
+				+ (password != null ? "passwordHash = " + password + ", \n   " : "")
 				+ (firstName != null ? "firstName = " + firstName + ", \n   " : "")
 				+ (lastName != null ? "lastName = " + lastName + ", \n   " : "")
 				+ (profilePicture != null ? "profilePicture = " + profilePicture + ", \n   " : "")
@@ -204,6 +249,10 @@ public class User {
 	public void setUserCreatedAt(LocalDateTime userCreatedAt) {
 		this.userCreatedAt = userCreatedAt;
 	}
+
+
+	
+
 
 	
 }
