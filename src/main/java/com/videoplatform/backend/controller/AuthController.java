@@ -47,7 +47,6 @@ public class AuthController {
 		try {
 			userService.addUser(user);
 			String token = jwtUtil.generateToken(user);
-			System.out.println(token);
 			return ResponseEntity
 					.ok()
 					.header(HttpHeaders.AUTHORIZATION, token)

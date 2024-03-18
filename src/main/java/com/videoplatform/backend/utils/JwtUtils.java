@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -22,7 +23,13 @@ public class JwtUtils {
 //   @Value("${jwt.secret}")
 
 	public String extractUsername(String token) {
-		return extractClaim(token, Claims::getSubject);
+		try {
+			return extractClaim(token, Claims::getSubject);
+		}
+		catch(Exception e) {
+			return null;
+		}
+		
 	}
 
 	public Date extractExpirationDate(String token) {
@@ -61,11 +68,17 @@ public class JwtUtils {
 	}
 
 	private Claims extractAllClaims(String token) {
+		 try {
 		return Jwts.parserBuilder()
 				.setSigningKey(getSignInKey())
 				.build()
 				.parseClaimsJws(token)
 				.getBody();
+		 }
+		 catch (MalformedJwtException ex) {
+			 ex.printStackTrace();
+			 return null;
+		 }
 		
 
 	}
