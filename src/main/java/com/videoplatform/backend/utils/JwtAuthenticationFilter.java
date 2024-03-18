@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.videoplatform.backend.repository.UserRepository;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +22,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private JwtUtils jwtUtils;
+	
+	private UserDetailsService userDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -44,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		
 		// user is not connected yet
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = userRepository.findByEmail(userEmail).orElse(null);
+			UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 			if(jwtUtils.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 					userDetails,

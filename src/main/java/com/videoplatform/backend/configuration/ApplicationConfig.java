@@ -12,19 +12,12 @@ import com.videoplatform.backend.repository.UserRepository;
 @Configuration
 public class ApplicationConfig {
 	
-//	@Bean
-//	public UserDetailsService userDetailsService() {
-//		return new UserDetailsService() {
-//			@Autowired
-//			private UserRepository repository;
-//			
-//			@Override
-//			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//
-//				return repository
-//						.findByEmail(username)
-//						.orElseThrow(() -> new UsernameNotFoundException("user not found"));
-//			}
-//		};
-//	}
+	@Autowired
+	private UserRepository repository;
+	@Bean
+	public UserDetailsService userDetailsService() {
+	    
+		return username -> repository.findByEmail(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	}
 }
