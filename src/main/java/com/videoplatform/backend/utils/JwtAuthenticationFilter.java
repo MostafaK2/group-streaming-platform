@@ -24,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	@Autowired
 	private JwtUtils jwtUtils;
 	
+	@Autowired
 	private UserDetailsService userDetailsService;
 
 	@Override
@@ -43,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		
 		// user is not connected yet
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+			UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 			// validate token
 			if(jwtUtils.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
