@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +16,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+
 @Component
 public class JwtUtils {
 	public static final long JWT_TOKEN_VALIDITY = 12 * 30 * 24 * 60 * 60;
-
+	
+	@Value("${jwt.secret}")
 	private static final String SECRET_KEY = "lB+ntA6Pvg4TjcqRepueLRRJ1mEffJb8reAZ38+OdXcdVQ7CZyuJMImSUua+6nscNk+3KlMnO2xfCmHIBLlyFyyr";
 	// @Value("${jwt.secret}")
+	@Value("${jwt.cookieExpiry}")
+	private int cookieExpiry;
 
 	public String extractUsername(String token) {
 		try {

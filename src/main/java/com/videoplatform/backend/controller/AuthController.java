@@ -3,6 +3,7 @@ package com.videoplatform.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,27 +31,33 @@ public class AuthController {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	@Autowired
 	private HttpServletRequest request;
-
+	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerReq(@RequestBody User user) {
 		try {
 			userService.addUser(user);
 			String token = jwtUtil.generateToken(user);
+			ResponseCookie cookie = ResponseCookie
+					.from("token", token)
+					.httpOnly(true)
+					.path("/")
+					.maxAge(1800)
+					.build();
+			
 			return ResponseEntity
 					.ok()
-					.header(HttpHeaders.AUTHORIZATION, token)
+					.header(HttpHeaders.SET_COOKIE, cookie.toString())
 					.build();
 		} catch (Exception e) {
-			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.CONFLICT, e.getMessage(),
+			String jsonResponse = JsonResponse
+					.createErrorResponse(HttpStatus.CONFLICT, e.getMessage(),
 					request.getRequestURI());
 			return ResponseEntity
 					.status(HttpStatus.CONFLICT)
@@ -63,13 +70,25 @@ public class AuthController {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
-							request.getEmail(), request.getPassword()));
+							request.getEmail(), request.getPassword())
+					);
+			
 
 			User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+			
 			String token = jwtUtil.generateToken(user);
+			
+			// allows cookies to be used across every endpoints
+			ResponseCookie cookie = ResponseCookie
+					.from("token", token)
+					.httpOnly(true)
+					.path("/")
+					.maxAge(1800)
+					.build();
 
 			return ResponseEntity.ok()
-					.header(HttpHeaders.AUTHORIZATION, token).build();
+					.header(HttpHeaders.SET_COOKIE, cookie.toString())
+					.build();
 		} catch (BadCredentialsException ex) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
