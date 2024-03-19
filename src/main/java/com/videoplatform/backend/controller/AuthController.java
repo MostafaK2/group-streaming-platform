@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,22 +24,22 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-	
+
 	@Autowired
 	private JwtUtils jwtUtil;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
-    private HttpServletRequest request;
-	
+	private HttpServletRequest request;
+
 	@PostMapping("/register")
 	public ResponseEntity<?> registerReq(@RequestBody User user) {
 		try {
@@ -52,31 +50,30 @@ public class AuthController {
 					.header(HttpHeaders.AUTHORIZATION, token)
 					.build();
 		} catch (Exception e) {
-			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.CONFLICT, e.getMessage(), request.getRequestURI());
+			String jsonResponse = JsonResponse.createErrorResponse(HttpStatus.CONFLICT, e.getMessage(),
+					request.getRequestURI());
 			return ResponseEntity
 					.status(HttpStatus.CONFLICT)
 					.body(jsonResponse);
-		}	
+		}
 	}
-	
+
 	@PostMapping("/login")
 	public ResponseEntity<?> loginReq(@RequestBody AuthenticationRequestDto request) {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
-							request.getEmail(), request.getPassword())
-					);
-			
+							request.getEmail(), request.getPassword()));
+
 			User user = userRepository.findByEmail(request.getEmail()).orElse(null);
 			String token = jwtUtil.generateToken(user);
-			
+
 			return ResponseEntity.ok()
 					.header(HttpHeaders.AUTHORIZATION, token).build();
-		}
-		catch (BadCredentialsException ex) {
+		} catch (BadCredentialsException ex) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		
+
 	}
 
 }

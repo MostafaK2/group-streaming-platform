@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,17 +16,17 @@ import com.videoplatform.backend.repository.UserRepository;
 
 @Configuration
 public class ApplicationConfig {
-	
+
 	@Autowired
 	private UserRepository repository;
+
 	@Bean
 	public UserDetailsService userDetailsService() {
-	    
+
 		return username -> repository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
-	
-	
+
 	// fetch user details and encode password and everything
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
@@ -35,9 +34,9 @@ public class ApplicationConfig {
 		authProvider.setUserDetailsService(userDetailsService());
 		authProvider.setPasswordEncoder(passwordEncoder());
 		return authProvider;
-		
+
 	}
-	
+
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
@@ -45,7 +44,6 @@ public class ApplicationConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		// TODO Auto-generated method stub
 		return new BCryptPasswordEncoder();
 	}
 }

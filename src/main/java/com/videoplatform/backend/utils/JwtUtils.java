@@ -20,32 +20,31 @@ public class JwtUtils {
 	public static final long JWT_TOKEN_VALIDITY = 12 * 30 * 24 * 60 * 60;
 
 	private static final String SECRET_KEY = "lB+ntA6Pvg4TjcqRepueLRRJ1mEffJb8reAZ38+OdXcdVQ7CZyuJMImSUua+6nscNk+3KlMnO2xfCmHIBLlyFyyr";
-//   @Value("${jwt.secret}")
+	// @Value("${jwt.secret}")
 
 	public String extractUsername(String token) {
 		try {
 			return extractClaim(token, Claims::getSubject);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
-		
+
 	}
 
 	public Date extractExpirationDate(String token) {
 		return extractClaim(token, Claims::getExpiration);
 	}
-	
+
 	public boolean isTokenExpired(String token) {
 		return extractExpirationDate(token).before(new Date());
 	}
-	
+
 	public boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		return (userDetails != null &&  username.equals(userDetails.getUsername())) 
+		return (userDetails != null && username.equals(userDetails.getUsername()))
 				&& !isTokenExpired(token);
 	}
-	
+
 	public String generateToken(UserDetails userDetails) {
 		return Jwts
 				.builder()
@@ -55,7 +54,7 @@ public class JwtUtils {
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
 				.compact();
 	}
-	
+
 	public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
 		return Jwts
 				.builder()
@@ -68,18 +67,16 @@ public class JwtUtils {
 	}
 
 	private Claims extractAllClaims(String token) {
-		 try {
-		return Jwts.parserBuilder()
-				.setSigningKey(getSignInKey())
-				.build()
-				.parseClaimsJws(token)
-				.getBody();
-		 }
-		 catch (MalformedJwtException ex) {
-			 ex.printStackTrace();
-			 return null;
-		 }
-		
+		try {
+			return Jwts.parserBuilder()
+					.setSigningKey(getSignInKey())
+					.build()
+					.parseClaimsJws(token)
+					.getBody();
+		} catch (MalformedJwtException ex) {
+			ex.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -89,7 +86,6 @@ public class JwtUtils {
 	}
 
 	private Key getSignInKey() {
-		// TODO Auto-genaserated method stub
 		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
 
 		return Keys.hmacShaKeyFor(keyBytes);
