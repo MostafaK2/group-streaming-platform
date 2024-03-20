@@ -41,4 +41,7 @@ public class Movie {
 	// returns the number of watch history per movie overall
 	@OneToMany(mappedBy="movie")
 	private List<WatchHistory> watchHistory;
+	
+	@OneToMany(mappedBy="movie")
+	private List<UserRating> userRatings;
 }
