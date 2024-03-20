@@ -8,8 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,8 +39,19 @@ public class Movie {
 	@Column private String director;
 	@Column private int imbdRating;
 	
+	// link to AWS S3 for poster image
+	@Column private String posterImage;
+	
 	// the relationships between movie and watch history
 	// returns the number of watch history per movie overall
 	@OneToMany(mappedBy="movie")
 	private List<WatchHistory> watchHistory;
+	
+	@OneToMany(mappedBy="movie")
+	private List<UserRating> userRatings;
+	
+//	@OneToOne(mappedBy = "movie")
+//	@JoinColumn(name="movie_data_id", referencedColumnName="movie_data_id")
+	@OneToOne
+	private MovieData movieData;
 }
