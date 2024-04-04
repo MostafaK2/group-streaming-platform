@@ -43,6 +43,7 @@ public class PartyController {
 		partyService.addParty(party);		
 	}
 	
+	
 
 	
 }
